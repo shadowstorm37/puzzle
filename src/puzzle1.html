@@ -1,0 +1,115 @@
+<!-- Button Puzzle -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Button Puzzle</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <style>
+        #puzzle-container {
+            position: relative;
+            width: 600px;
+            height: 600px;
+            display: flex;
+            flex-wrap: wrap;
+            border: 2px solid black;
+        }
+        .piece {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: url('UnionSq.jpg');
+            border: 1px solid #000;
+            box-sizing: border-box;
+        }
+        .empty {
+            background: none;
+            border: none;
+        }
+        #controls {
+            margin-top: 20px;
+        }
+        .link-button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 18px;
+            border: none; /* Remove border */
+            outline: none; /* Remove outline */
+        }
+        .link-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Union Square Station</h1>
+    <div id="puzzle-container"></div>
+    <div id="controls">
+        <button id="up">Up</button>
+        <button id="down">Down</button>
+        <button id="left">Left</button>
+        <button id="right">Right</button>
+    </div>
+    <br>
+    <a href="home.html" class="link-button">Home</a>
+    <button id="puzzle2-btn" class="link-button">Go to Puzzle 2</button>
+
+    <script>
+        $(document).ready(function() {
+            let gridSize = 3;
+            let pieceSize = 200;
+            let positions = [];
+            let emptyIndex = Math.floor(Math.random() * 9);
+            let movablePieceIndex;
+
+            for (let row = 0; row < gridSize; row++) {
+                for (let col = 0; col < gridSize; col++) {
+                    positions.push({ x: col * pieceSize, y: row * pieceSize });
+                }
+            }
+
+            positions.forEach((pos, index) => {
+                let piece = $('<div class="piece"></div>');
+                piece.css({
+                    left: pos.x,
+                    top: pos.y,
+                    backgroundPosition: `-${pos.x}px -${pos.y}px`
+                });
+
+                if (index === emptyIndex) {
+                    piece.addClass('empty').css('background', 'none');
+                } else {
+                    $('#puzzle-container').append(piece);
+                }
+            });
+
+            do {
+                movablePieceIndex = Math.floor(Math.random() * 9);
+            } while (movablePieceIndex === emptyIndex);
+
+            let movablePiece = $('<div class="piece" id="movable-piece"></div>').css({
+                left: positions[movablePieceIndex].x,
+                top: positions[movablePieceIndex].y,
+                backgroundPosition: `-${positions[emptyIndex].x}px -${positions[emptyIndex].y}px`
+            });
+            $('#puzzle-container').append(movablePiece);
+
+            $('#up').click(() => { $('#movable-piece').animate({ top: '-=200px' }); });
+            $('#down').click(() => { $('#movable-piece').animate({ top: '+=200px' }); });
+            $('#left').click(() => { $('#movable-piece').animate({ left: '-=200px' }); });
+            $('#right').click(() => { $('#movable-piece').animate({ left: '+=200px' }); });
+
+            $('#puzzle2-btn').click(function() {
+                window.location.href = "puzzle2.html";
+            });
+        });
+    </script>
+</body>
+</html>
